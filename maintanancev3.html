@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Maintenance Status Update</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #6A8DFF;
+            --bg-gradient-end: #7B61FF;
+            --bg-surface: #F5F7FB;
+            --primary: #5B6EF5;
+            --primary-dark: #2F5BFF;
+            --secondary: #C7D2FE;
+            --success: #22C55E;
+            --danger: #EF4444;
+            --danger-strong: #DC2626;
+            --alert-bg: #FDECEC;
+            --alert-border: #F5B5B5;
+            --text-primary: #2D2F36;
+            --text-secondary: #6B7280;
+            --input-bg: #FFFFFF;
+            --input-border: #D6DCE8;
+            --glass-bg: #F5F7FB;
+            --glass-border: #D6DCE8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            min-height: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--bg-base), var(--bg-gradient-end));
+            color: var(--text-primary);
+            min-height: 100svh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: clamp(14px, 3vw, 32px);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(199, 210, 254, 0.28) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.14) 0%, transparent 50%);
+            animation: bgShift 20s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-5%, -5%); }
+        }
+
+        .container {
+            max-width: 640px;
+            width: min(100%, 640px);
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--bg-surface);
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            border-radius: clamp(20px, 4vw, 28px);
+            padding: clamp(1.25rem, 4vw, 2.75rem);
+            box-shadow: 0 24px 70px rgba(45, 47, 54, 0.20);
+            max-height: calc(100svh - clamp(28px, 6vw, 64px));
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+        }
+
+        .container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .container::-webkit-scrollbar-thumb {
+            background: rgba(91, 110, 245, 0.28);
+            border-radius: 999px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
+            font-weight: 900;
+            text-align: left;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            letter-spacing: -1px;
+            text-transform: none;
+            position: relative;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(91, 110, 245, 0.18)); }
+            50% { filter: drop-shadow(0 0 30px rgba(123, 97, 255, 0.18)); }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            animation-fill-mode: both;
+        }
+
+        .form-group.no-margin {
+            margin-bottom: 0;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        label .required {
+            color: var(--primary);
+            margin-left: 4px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(91, 110, 245, 0.12),
+                        0 8px 24px rgba(91, 110, 245, 0.16);
+            transform: translateY(-2px);
+        }
+
+        select:hover, input:hover {
+            border-color: rgba(91, 110, 245, 0.45);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%235B6EF5' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+            padding-right: 45px;
+        }
+
+        select[multiple] {
+            height: auto;
+            min-height: 120px;
+            background-image: none;
+            padding-right: 18px;
+        }
+
+        select[multiple] option {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 4px 0;
+        }
+
+        select[multiple] option:checked {
+            background: linear-gradient(135deg, rgba(91, 110, 245, 0.22), rgba(123, 97, 255, 0.16));
+            color: var(--text-primary);
+            box-shadow: 0 0 0 9999px rgba(91, 110, 245, 0.14) inset;
+        }
+
+        select[multiple] option:checked:hover {
+            background: linear-gradient(135deg, rgba(91, 110, 245, 0.28), rgba(123, 97, 255, 0.20));
+        }
+
+        .info-card {
+            background: var(--alert-bg);
+            border: 1px solid var(--alert-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        0 0 0 1px rgba(91, 110, 245, 0.12) inset;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: none;
+        }
+
+        .info-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        .info-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-card h3::before {
+            content: '▪';
+            color: var(--secondary);
+            font-size: 1.5rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .info-value.amount {
+            color: var(--danger);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .info-value.pending {
+            color: var(--danger-strong);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(91, 110, 245, 0.18);
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(91, 110, 245, 0.38);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            min-height: 100svh;
+            background: rgba(45, 47, 54, 0.45);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(14px, 3vw, 28px);
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg-surface);
+            border: 1px solid var(--input-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        0 0 100px rgba(91, 110, 245, 0.16);
+            animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .modal-info {
+            background: rgba(199, 210, 254, 0.22);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .modal-row:last-child {
+            border-bottom: none;
+        }
+
+        .modal-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .modal-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .modal-value.highlight {
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cancel-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cancel-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .confirm-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            font-weight: 700;
+            box-shadow: 0 4px 20px rgba(91, 110, 245, 0.28);
+        }
+
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(91, 110, 245, 0.38);
+        }
+
+        .amount-display {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(199, 210, 254, 0.22);
+            border-radius: 10px;
+            border: 1px solid var(--input-border);
+            margin-top: 0.5rem;
+        }
+
+
+        .selected-months-card {
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(214, 220, 232, 0.9);
+            border-radius: 18px;
+            padding: 1rem;
+            margin-top: -0.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 14px 35px rgba(45, 47, 54, 0.12);
+            display: none;
+        }
+
+        .selected-months-card.visible {
+            display: block;
+            animation: fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .selected-months-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .month-chip-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+        }
+
+        .month-chip {
+            padding: 0.65rem 0.9rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(91, 110, 245, 0.14), rgba(123, 97, 255, 0.10));
+            border: 1px solid rgba(91, 110, 245, 0.18);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(91, 110, 245, 0.14);
+        }
+
+        .month-chip.due-chip {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(253, 236, 236, 0.95));
+            border-color: rgba(245, 181, 181, 0.9);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.10);
+        }
+
+        .month-chip.advance-chip {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(240, 253, 244, 0.95));
+            border-color: rgba(34, 197, 94, 0.22);
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.10);
+        }
+
+        .empty-chip-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+
+        .toast-popup {
+            position: fixed;
+            left: 50%;
+            bottom: 28px;
+            transform: translateX(-50%) translateY(30px);
+            min-width: 260px;
+            max-width: calc(100% - 40px);
+            padding: 14px 18px;
+            border-radius: 16px;
+            background: rgba(245, 247, 251, 0.96);
+            border: 1px solid rgba(214, 220, 232, 0.9);
+            color: var(--text-primary);
+            box-shadow: 0 18px 45px rgba(47, 91, 255, 0.20), 0 8px 18px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .toast-popup.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .toast-popup.success .toast-icon {
+            background: rgba(34, 197, 94, 0.14);
+            color: #16A34A;
+        }
+
+        .toast-popup.cancel .toast-icon {
+            background: rgba(239, 68, 68, 0.12);
+            color: #DC2626;
+        }
+
+
+        @media (max-width: 640px) {
+            body {
+                align-items: flex-start;
+                padding: 12px;
+            }
+
+            .container {
+                max-height: calc(100svh - 24px);
+                border-radius: 20px;
+            }
+
+            .form-group {
+                margin-bottom: 1.15rem;
+            }
+
+            select, input {
+                padding: 13px 15px;
+            }
+
+            .info-row,
+            .modal-row {
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .info-value,
+            .modal-value {
+                max-width: 55%;
+                word-break: break-word;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .toast-popup {
+                left: 12px;
+                right: 12px;
+                bottom: 12px;
+                width: auto;
+            }
+        }
+
+        @media (min-width: 900px) {
+            body {
+                align-items: center;
+            }
+        }
+
+        @media (max-height: 720px) {
+            body {
+                align-items: flex-start;
+            }
+        }
+
+        /* Fluid fit override: everything scales according to screen size */
+        html {
+            font-size: clamp(12px, 1.05vw, 18px);
+        }
+
+        body {
+            align-items: center;
+            padding: clamp(8px, 2vw, 28px);
+            overflow: hidden;
+        }
+
+        .container {
+            width: min(96vw, 640px);
+            max-height: min(96svh, 900px);
+            padding: clamp(1rem, 3.2vw, 2.6rem);
+            border-radius: clamp(16px, 3vw, 28px);
+        }
+
+        h1 {
+            font-size: clamp(1.35rem, 5.5vw, 2.5rem);
+            margin-bottom: clamp(1rem, 3vw, 2rem);
+        }
+
+        .form-group {
+            margin-bottom: clamp(0.85rem, 2.2vw, 1.5rem);
+        }
+
+        label {
+            font-size: clamp(0.75rem, 1.3vw, 0.9rem);
+            margin-bottom: clamp(0.35rem, 1vw, 0.5rem);
+        }
+
+        select, input {
+            padding: clamp(10px, 1.6vw, 16px) clamp(12px, 2vw, 18px);
+            border-radius: clamp(10px, 1.5vw, 14px);
+            font-size: clamp(0.9rem, 1.3vw, 1rem);
+        }
+
+        .info-card,
+        .selected-months-card,
+        .modal-info {
+            padding: clamp(1rem, 2.4vw, 1.5rem);
+            border-radius: clamp(14px, 2vw, 18px);
+        }
+
+        .info-row,
+        .modal-row {
+            padding: clamp(0.45rem, 1.1vw, 0.75rem) 0;
+        }
+
+        .submit-btn {
+            padding: clamp(12px, 1.8vw, 17px);
+            border-radius: clamp(10px, 1.5vw, 14px);
+            font-size: clamp(0.85rem, 1.3vw, 1rem);
+            letter-spacing: clamp(1px, 0.25vw, 2px);
+        }
+
+        .modal {
+            padding: clamp(8px, 2vw, 28px);
+        }
+
+        .modal-content {
+            width: min(92vw, 500px);
+            max-height: 90svh;
+            overflow-y: auto;
+            padding: clamp(1.1rem, 3vw, 2.5rem);
+            border-radius: clamp(16px, 3vw, 22px);
+        }
+
+        .modal-header {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            margin-bottom: clamp(1rem, 2vw, 1.5rem);
+        }
+
+        .modal-buttons {
+            gap: clamp(0.65rem, 1.5vw, 1rem);
+        }
+
+        .modal-btn {
+            padding: clamp(11px, 1.6vw, 14px);
+            font-size: clamp(0.85rem, 1.2vw, 1rem);
+        }
+
+        .month-chip-wrap {
+            gap: clamp(0.4rem, 1.2vw, 0.65rem);
+        }
+
+        .month-chip {
+            padding: clamp(0.45rem, 1.1vw, 0.65rem) clamp(0.65rem, 1.6vw, 0.9rem);
+            font-size: clamp(0.72rem, 1.25vw, 0.9rem);
+        }
+
+        .toast-popup {
+            max-width: min(92vw, 440px);
+            padding: clamp(12px, 1.8vw, 16px) clamp(14px, 2vw, 20px);
+            font-size: clamp(0.82rem, 1.2vw, 0.95rem);
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 8px; }
+            .container { width: 100%; max-height: calc(100svh - 16px); }
+            .info-value, .modal-value { max-width: 58%; word-break: break-word; }
+            .modal-buttons { flex-direction: column; }
+            .toast-popup { left: 8px; right: 8px; bottom: 8px; width: auto; }
+        }
+
+        @media (max-height: 720px) {
+            html { font-size: clamp(11px, 1.3vw, 15px); }
+            .container { max-height: calc(100svh - 16px); }
+        }
+
+        @media (max-height: 560px) {
+            html { font-size: 11px; }
+            body { padding: 6px; }
+            .container { max-height: calc(100svh - 12px); }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Maintenance Update</h1>
+
+        <div class="form-group no-margin">
+            <label for="flatSelect">Select Flat <span class="required">*</span></label>
+            <select id="flatSelect" required>
+                <option value="">Choose a flat...</option>
+                <option value="101|Rajesh Kumar">101 - Rajesh Kumar</option>
+                <option value="102|Priya Sharma">102 - Priya Sharma</option>
+                <option value="103|Amit Patel">103 - Amit Patel</option>
+                <option value="104|Sunita Reddy">104 - Sunita Reddy</option>
+                <option value="105|Vikram Singh">105 - Vikram Singh</option>
+                <option value="201|Anita Desai">201 - Anita Desai</option>
+                <option value="202|Karan Mehta">202 - Karan Mehta</option>
+                <option value="203|Neha Gupta">203 - Neha Gupta</option>
+                <option value="204|Sanjay Verma">204 - Sanjay Verma</option>
+                <option value="205|Deepa Nair">205 - Deepa Nair</option>
+                <option value="301|Rahul Joshi">301 - Rahul Joshi</option>
+                <option value="302|Kavita Iyer">302 - Kavita Iyer</option>
+                <option value="303|Arun Rao">303 - Arun Rao</option>
+                <option value="304|Meera Shah">304 - Meera Shah</option>
+                <option value="305|Vijay Menon">305 - Vijay Menon</option>
+            </select>
+        </div>
+
+        <div id="infoCard" class="info-card">
+            <h3><span id="cardFlatName">Flat Info</span></h3>
+            <div class="info-row">
+                <span class="info-label">Total Due</span>
+                <span class="info-value amount" id="totalDue">₹0</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Pending Months</span>
+                <span class="info-value pending" id="pendingMonths">-</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="amountInput">Amount <span class="required">*</span></label>
+            <select id="amountInput" required disabled>
+                <option value="">Select a flat first...</option>
+            </select>
+        </div>
+
+        <div id="selectedMonthsCard" class="selected-months-card">
+            <div class="selected-months-title">Months covered by this amount</div>
+            <div id="monthChips" class="month-chip-wrap">
+                <span class="empty-chip-text">Select an amount to view month chips</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="paymentMethod">Payment Method <span class="required">*</span></label>
+            <select id="paymentMethod" required>
+                <option value="">Choose payment method...</option>
+                <option value="Cash">Cash</option>
+                <option value="UPI">UPI</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="collectedBy">Collected By <span class="required">*</span></label>
+            <input type="text" id="collectedBy" placeholder="Enter collector name" required>
+        </div>
+
+        <button class="submit-btn" onclick="showConfirmation()">Mark as Paid</button>
+    </div>
+
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Confirm Payment</div>
+            <div class="modal-info">
+                <div class="modal-row">
+                    <span class="modal-label">Flat No & Name</span>
+                    <span class="modal-value" id="modalFlat">-</span>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">Months</span>
+                    <span class="modal-value" id="modalMonths">-</span>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">Amount</span>
+                    <span class="modal-value highlight" id="modalAmount">₹0</span>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">Payment Mode</span>
+                    <span class="modal-value" id="modalPayment">-</span>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">Collected By</span>
+                    <span class="modal-value" id="modalCollector">-</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" onclick="cancelPayment()">Cancel</button>
+                <button class="modal-btn confirm-btn" onclick="confirmPayment()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastPopup" class="toast-popup">
+        <span id="toastIcon" class="toast-icon">✓</span>
+        <span id="toastMessage">Updated successfully</span>
+    </div>
+
+    <script>
+        // Sample data for demonstration - in real app, this would come from backend
+        const flatData = {
+            // Keep pendingMonths in oldest-to-newest order.
+            // Previous year dues work because month values include the year.
+            '101|Rajesh Kumar': { due: 4500, pendingMonths: ['January 2024', 'February 2024', 'March 2024'] },
+            '102|Priya Sharma': { due: 3000, pendingMonths: ['February 2024', 'March 2024'] },
+            '103|Amit Patel': { due: 6000, pendingMonths: ['December 2023', 'January 2024', 'February 2024', 'March 2024'] },
+            '104|Sunita Reddy': { due: 1500, pendingMonths: ['March 2024'] },
+            '105|Vikram Singh': { due: 0, pendingMonths: [] },
+            '201|Anita Desai': { due: 3000, pendingMonths: ['January 2024', 'February 2024'] },
+            '202|Karan Mehta': { due: 1500, pendingMonths: ['March 2024'] },
+            '203|Neha Gupta': { due: 4500, pendingMonths: ['January 2024', 'February 2024', 'March 2024'] },
+            '204|Sanjay Verma': { due: 0, pendingMonths: [] },
+            '205|Deepa Nair': { due: 3000, pendingMonths: ['February 2024', 'March 2024'] },
+            '301|Rahul Joshi': { due: 1500, pendingMonths: ['March 2024'] },
+            '302|Kavita Iyer': { due: 6000, pendingMonths: ['December 2023', 'January 2024', 'February 2024', 'March 2024'] },
+            '303|Arun Rao': { due: 0, pendingMonths: [] },
+            '304|Meera Shah': { due: 3000, pendingMonths: ['February 2024', 'March 2024'] },
+            '305|Vijay Menon': { due: 1500, pendingMonths: ['March 2024'] }
+        };
+
+        const monthlyRate = 1500;
+        let selectedFlat = null;
+        let currentPendingMonths = [];
+        let selectedMonthsForPayment = [];
+
+        document.getElementById('flatSelect').addEventListener('change', function() {
+            const flatValue = this.value;
+            if (!flatValue) {
+                document.getElementById('infoCard').classList.remove('visible');
+                currentPendingMonths = [];
+                selectedFlat = null;
+                clearMonthChips();
+                buildAmountDropdown();
+                return;
+            }
+
+            selectedFlat = flatValue;
+            const data = flatData[flatValue];
+            const [flatNo, name] = flatValue.split('|');
+
+            // Store current pending months
+            currentPendingMonths = [...data.pendingMonths];
+
+            // Update info card
+            document.getElementById('cardFlatName').textContent = `${flatNo} - ${name}`;
+            document.getElementById('totalDue').textContent = `₹${data.due.toLocaleString()}`;
+            document.getElementById('pendingMonths').textContent = 
+                data.pendingMonths.length > 0 ? data.pendingMonths.join(', ') : 'All Clear ✓';
+            document.getElementById('infoCard').classList.add('visible');
+
+            // Reset month selection and rebuild amount dropdown
+            clearMonthChips();
+            buildAmountDropdown();
+        });
+
+        // Amount dropdown drives month selection
+        document.getElementById('amountInput').addEventListener('change', function() {
+            updateMonthSelectionByAmount();
+        });
+
+        function buildAmountDropdown() {
+            const amountSelect = document.getElementById('amountInput');
+            amountSelect.innerHTML = '';
+
+            if (!selectedFlat) {
+                amountSelect.disabled = true;
+                amountSelect.innerHTML = '<option value="">Select a flat first...</option>';
+                return;
+            }
+
+            amountSelect.disabled = false;
+            amountSelect.appendChild(new Option('Select Amount', ''));
+
+            // Amount options from 1 month to 12 months
+            for (let monthCount = 1; monthCount <= 12; monthCount++) {
+                const amount = monthCount * monthlyRate;
+                const label = `₹${amount.toLocaleString()} (${monthCount} ${monthCount === 1 ? 'Month' : 'Months'})`;
+                amountSelect.appendChild(new Option(label, amount));
+            }
+        }
+
+        function getAllMonthsTimeline() {
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+
+            const parsedPending = currentPendingMonths.map(parseMonthYear).filter(Boolean);
+            const today = new Date();
+            const currentMonthDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            const earliestPending = parsedPending.length ? parsedPending[0] : currentMonthDate;
+
+            const startDate = earliestPending < currentMonthDate ? earliestPending : currentMonthDate;
+            const months = [];
+            const cursor = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+
+            // 36 months gives enough room for advance payment and next-year rollover.
+            for (let i = 0; i < 36; i++) {
+                months.push(`${monthNames[cursor.getMonth()]} ${cursor.getFullYear()}`);
+                cursor.setMonth(cursor.getMonth() + 1);
+            }
+
+            return months;
+        }
+
+        function parseMonthYear(value) {
+            if (!value) return null;
+            const [monthName, yearText] = value.split(' ');
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            const monthIndex = monthNames.indexOf(monthName);
+            const year = parseInt(yearText, 10);
+            if (monthIndex === -1 || !year) return null;
+            return new Date(year, monthIndex, 1);
+        }
+
+        function updateMonthSelectionByAmount() {
+            const amount = parseInt(document.getElementById('amountInput').value) || 0;
+
+            if (amount === 0 || !selectedFlat) {
+                clearMonthChips();
+                return;
+            }
+
+            const monthsCount = Math.min(Math.floor(amount / monthlyRate), 12);
+            const allMonths = getAllMonthsTimeline();
+
+            // Smart chip rule:
+            // 1. Add due months first.
+            // 2. If amount covers more than pending dues, add next months as advance payment.
+            let monthsToShow = currentPendingMonths.slice(0, monthsCount);
+
+            if (monthsToShow.length < monthsCount) {
+                const remainingMonths = monthsCount - monthsToShow.length;
+
+                let startIndex = 0;
+                if (currentPendingMonths.length > 0) {
+                    const lastPendingMonth = currentPendingMonths[currentPendingMonths.length - 1];
+                    startIndex = allMonths.indexOf(lastPendingMonth) + 1;
+                }
+
+                const nextMonths = allMonths
+                    .slice(startIndex)
+                    .filter(month => !monthsToShow.includes(month))
+                    .slice(0, remainingMonths);
+
+                monthsToShow = [...monthsToShow, ...nextMonths];
+            }
+
+            renderMonthChips(monthsToShow);
+        }
+
+        function clearMonthChips() {
+            selectedMonthsForPayment = [];
+            const selectedMonthsCard = document.getElementById('selectedMonthsCard');
+            const monthChips = document.getElementById('monthChips');
+            selectedMonthsCard.classList.remove('visible');
+            monthChips.innerHTML = '<span class="empty-chip-text">Select an amount to view month chips</span>';
+        }
+
+        function renderMonthChips(monthNames) {
+            selectedMonthsForPayment = [...monthNames];
+            const selectedMonthsCard = document.getElementById('selectedMonthsCard');
+            const monthChips = document.getElementById('monthChips');
+
+            if (monthNames.length === 0) {
+                clearMonthChips();
+                return;
+            }
+
+            monthChips.innerHTML = '';
+            monthNames.forEach(month => {
+                const chip = document.createElement('span');
+                chip.className = currentPendingMonths.includes(month) ? 'month-chip due-chip' : 'month-chip advance-chip';
+                chip.textContent = month;
+                monthChips.appendChild(chip);
+            });
+
+            selectedMonthsCard.classList.add('visible');
+        }
+
+        function showConfirmation() {
+            // Validate all required fields
+            const flatSelect = document.getElementById('flatSelect');
+            const paymentMethod = document.getElementById('paymentMethod');
+            const collectedBy = document.getElementById('collectedBy');
+            const amountInput = document.getElementById('amountInput');
+
+            if (!flatSelect.value) {
+                alert('Please select a flat');
+                flatSelect.focus();
+                return;
+            }
+
+            if (!amountInput.value || parseInt(amountInput.value) <= 0) {
+                alert('Please select a valid amount');
+                amountInput.focus();
+                return;
+            }
+
+            if (selectedMonthsForPayment.length === 0) {
+                alert('Please select an amount to generate month chips');
+                amountInput.focus();
+                return;
+            }
+
+            if (!paymentMethod.value) {
+                alert('Please select a payment method');
+                paymentMethod.focus();
+                return;
+            }
+
+            if (!collectedBy.value.trim()) {
+                alert('Please enter collector name');
+                collectedBy.focus();
+                return;
+            }
+
+            // Populate modal
+            const [flatNo, name] = flatSelect.value.split('|');
+            const selectedMonths = [...selectedMonthsForPayment];
+            const amount = parseInt(amountInput.value);
+
+            document.getElementById('modalFlat').textContent = `${flatNo} - ${name}`;
+            document.getElementById('modalMonths').textContent = selectedMonths.join(', ');
+            document.getElementById('modalAmount').textContent = `₹${amount.toLocaleString()}`;
+            document.getElementById('modalPayment').textContent = paymentMethod.value;
+            document.getElementById('modalCollector').textContent = collectedBy.value;
+
+            // Show modal
+            document.getElementById('confirmModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('confirmModal').classList.remove('show');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toastPopup');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastMessage = document.getElementById('toastMessage');
+
+            toast.className = `toast-popup ${type}`;
+            toastIcon.textContent = type === 'cancel' ? '×' : '✓';
+            toastMessage.textContent = message;
+
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2200);
+        }
+
+        function cancelPayment() {
+            closeModal();
+            showToast('Payment update cancelled', 'cancel');
+        }
+
+        function confirmPayment() {
+            // In real app, this would submit to backend
+            closeModal();
+            showToast('Maintenance payment updated successfully', 'success');
+            
+            // Reset form
+            document.getElementById('flatSelect').value = '';
+            document.getElementById('paymentMethod').value = '';
+            document.getElementById('collectedBy').value = '';
+            document.getElementById('infoCard').classList.remove('visible');
+            selectedFlat = null;
+            currentPendingMonths = [];
+            clearMonthChips();
+            buildAmountDropdown();
+        }
+
+        buildAmountDropdown();
+
+        // Close modal on background click
+        document.getElementById('confirmModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
